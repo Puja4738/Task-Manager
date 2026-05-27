@@ -1,0 +1,32 @@
+import jwt, { SignOptions } from 'jsonwebtoken';
+
+interface JwtPayload {
+  userId: string;
+}
+
+export const generateToken = (userId: string): string => {
+  const secret = process.env.JWT_SECRET;
+
+  if (!secret) {
+    throw new Error('JWT_SECRET is not defined');
+  }
+
+  // Default to 7 days if not provided
+  const expiresInEnv = process.env.JWT_EXPIRE ?? '7d';
+
+  const options: SignOptions = {
+    expiresIn: expiresInEnv as SignOptions['expiresIn'],
+  };
+
+  return jwt.sign({ userId }, secret, options);
+};
+
+export const verifyToken = (token: string): JwtPayload => {
+  const secret = process.env.JWT_SECRET;
+
+  if (!secret) {
+    throw new Error('JWT_SECRET is not defined');
+  }
+
+  return jwt.verify(token, secret) as JwtPayload;
+};
