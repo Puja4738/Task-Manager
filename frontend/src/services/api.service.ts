@@ -13,10 +13,6 @@ const apiClient: AxiosInstance = axios.create({
   },
   withCredentials: true, // Important for cookies
 });
-
-/**
- * Request interceptor to add token to headers
- */
 apiClient.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
@@ -30,9 +26,6 @@ apiClient.interceptors.request.use(
   }
 );
 
-/**
- * Response interceptor for error handling
- */
 apiClient.interceptors.response.use(
   (response) => response,
   (error: AxiosError<{ message: string }>) => {
